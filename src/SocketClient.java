@@ -16,53 +16,39 @@ public class SocketClient {
     public static void main(String[] args) throws UnknownHostException, IOException, ClassNotFoundException, InterruptedException{
         //get the localhost IP address, if server is running on some other IP, you need to use that
         InetAddress host = InetAddress.getLocalHost();
+        System.out.println(InetAddress.getLocalHost());
+        System.out.println(host.getHostName() + " " + host.getAddress());
         Socket socket = null;
-        ObjectOutputStream oos = null;
-        ObjectInputStream ois = null;
-//        for(int i=0; i<5;i++){
-//            //establish socket connection to server
-//            socket = new Socket(host.getHostName(), 9876);
-//            //write to socket using ObjectOutputStream
-//            oos = new ObjectOutputStream(socket.getOutputStream());
-//            System.out.println("Sending request to Socket Server");
-//            if(i==4)oos.writeObject("exit");
-//            else oos.writeObject(""+i);
-//            //read the server response message
-//            ois = new ObjectInputStream(socket.getInputStream());
-//            String message = (String) ois.readObject();
-//            System.out.println("Message: " + message);
-//            //close resources
-//            ois.close();
-//            oos.close();
-//            Thread.sleep(100);
-//        }
+        ObjectOutputStream output = null;
+        ObjectInputStream input = null;
+
 
         while (true) {
-            String input = "";
+            String inputMessage = "";
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter the command line here: ");
-            input = scanner.nextLine();
+            inputMessage = scanner.nextLine();
 
             socket = new Socket(host.getHostName(), 9876);
             System.out.println(host.getHostName());
-            oos = new ObjectOutputStream(socket.getOutputStream());
+            output = new ObjectOutputStream(socket.getOutputStream());
 
             System.out.println("sending request to Socket Server");
-            if (input.equalsIgnoreCase("quit")){
-                oos.writeObject("exit");
-                oos.close();
+            if (inputMessage.equalsIgnoreCase("quit")){
+                output.writeObject("exit");
+                output.close();
                 break;
             }
-            oos.writeObject(input);
+            output.writeObject(inputMessage);
 
             //read the server response message
-            ois = new ObjectInputStream(socket.getInputStream());
-            String message = (String) ois.readObject();
+            input = new ObjectInputStream(socket.getInputStream());
+            String message = (String) input.readObject();
             System.out.println(message);
 
             //close resources
-            ois.close();
-            oos.close();
+            input.close();
+            output.close();
             Thread.sleep(100);
         }
     }

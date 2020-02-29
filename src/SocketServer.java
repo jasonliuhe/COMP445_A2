@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.ClassNotFoundException;
+import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.URL;
 
 /**
  * This class implements java Socket server
@@ -56,7 +58,77 @@ public class SocketServer {
     }
 
     private static String Response(String request){
-        return request;
+        String ResponseMessage = "";
+
+        //splited by space
+        String[] splited = request.split("\\s+");
+        for (int i = 0; i < splited.length; i++) {
+            System.out.println("splited[" + i + "]: " + splited[i]);
+        }
+
+        //GET
+        if (splited[0].equalsIgnoreCase("get")){
+            // url (tested)
+            if (splited[1].charAt(0) == '\''){
+                try {
+                    String ourl = splited[1].substring(1, splited[1].length()-1);
+                    URL url = new URL(ourl);
+
+                    String[] argsSplited = url.getQuery().split("&");
+                    String args = "";
+                    for (int i = 0; i < argsSplited.length; i++) {
+                        String name = "";
+                        String para = "";
+                        String[] nameParaSplited = argsSplited[i].split("=");
+                        name = nameParaSplited[0];
+                        para = nameParaSplited[1];
+                        args = args + "\t\t\"" + name + "\"" + " : " + "\"" + para + "\",\n\r";
+
+                        System.out.println(args);
+                    }
+                    ResponseMessage = "{\n\r" +
+                            "\t\"args\": {\n\r" +
+                            args + "\t},\n\r" +
+                            "\t\"headers\": {\n\r" +
+                            "\t\t\"Host\": \"" + url.getHost() + "\",\n\r" +
+                            "\t\t\"User-Agent\": \"" + url.getUserInfo() + "\",\n\r" +
+                            "\t},\n\r" +
+                            "\t\"url\": " + "\"" + ourl + "\"\n\r" +
+                            "}";
+
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+            // -v (tested)
+            else if (splited[1].equalsIgnoreCase("-v")){
+
+            }
+            // / (tested)
+            else if (splited[1].equalsIgnoreCase("/")){
+
+            }
+            // /foo (tested)
+            else if (splited[1].charAt(0) == '/'){
+
+            }
+
+            else {
+
+            }
+        }
+        //POST
+        else if (splited[0].equalsIgnoreCase("post")){
+
+        }
+
+        else {
+
+        }
+
+        return ResponseMessage;
     }
 
 }
