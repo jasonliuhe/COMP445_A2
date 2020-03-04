@@ -1,2 +1,7 @@
 # Project exclude paths
 /out/
+.idea/misc.xml
+.idea/vcs.xml
+.idea/vcs.xml
+.idea/vcs.xml
+.idea/misc.xml

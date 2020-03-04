@@ -1,4 +1,4 @@
-import com.sun.xml.internal.bind.v2.TODO;
+//import com.sun.xml.internal.bind.v2.TODO;
 
 import java.io.*;
 import java.lang.ClassNotFoundException;
@@ -107,6 +107,7 @@ public class SocketServer {
                 }
 
             }
+
             // -v (tested)
             else if (splited[1].equalsIgnoreCase("-v")){
                 try {
@@ -195,11 +196,98 @@ public class SocketServer {
             else {
 
             }
+
         }
+
+
         //POST
         else if (splited[0].equalsIgnoreCase("post")){
 
+            if (splited[1].charAt(0) == '\''){
+                try {
+                    String ourl = splited[1].substring(1, splited[1].length()-1);
+                    URL url = new URL(ourl);
+
+                    String[] argsSplited = url.getQuery().split("&");
+                    String args = "";
+                    for (int i = 0; i < argsSplited.length; i++) {
+                        String name = "";
+                        String para = "";
+                        String[] nameParaSplited = argsSplited[i].split("=");
+                        name = nameParaSplited[0];
+                        para = nameParaSplited[1];
+                        args = args + "\t\t\"" + name + "\"" + " : " + "\"" + para + "\",\n\r";
+
+                        System.out.println(args);
+                    }
+                    ResponseMessage = "{\n\r" +
+                            "\t\"args\": {\n\r" +
+                            args + "\t},\n\r" +
+                            "\t\"headers\": {\n\r" +
+                            "\t\t\"Host\": \"" + url.getHost() + "\",\n\r" +
+                            "\t\t\"User-Agent\": \"" + url.getUserInfo() + "\",\n\r" +
+                            "\t},\n\r" +
+                            "\t\"url\": " + "\"" + ourl + "\"\n\r" +
+                            "}";
+
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            else if (splited[1].equalsIgnoreCase("-v")){
+
+                try {
+                    String ourl = splited[2].substring(1, splited[2].length()-1);
+                    URL url = new URL(ourl);
+
+                    String[] argsSplited = url.getQuery().split("&");
+
+                    String args = "";
+                    for (int i = 0; i < argsSplited.length; i++) {
+                        String name = "";
+                        String para = "";
+                        String[] nameParaSplited = argsSplited[i].split("=");
+                        name = nameParaSplited[0];
+                        para = nameParaSplited[1];
+                        args = args + "\t\t\"" + name + "\"" + " : " + "\"" + para + "\",\n\r";
+
+                        System.out.println(args);
+                    }
+
+                    ResponseMessage = "{\n\r" +
+                            "\t\"args\": {\n\r" +
+                            args + "\t},\n\r" +
+                            "\t\"headers\": {\n\r" +
+                            "\t\t\"Host\": \"" + url.getHost() + "\",\n\r" +
+                            "\t\t\"User-Agent\": \"" + url.getUserInfo() + "\",\n\r" +
+                            "\t},\n\r" +
+                            "\t\"url\": " + "\"" + ourl + "\"\n\r" +
+                            "}";
+                    String header = "HTTP/1.1 200 OK\r\n" +
+                            "Server: \r\n" +
+                            "Date: " + date + "\r\n" +
+                            "Content-Type: application/json\r\n" +
+                            "Content-Length: " + ResponseMessage.length() + "\r\n" +
+                            "Connection: close\r\n" +
+                            "Access-Control-Allow-Origin: *\r\n" +
+                            "Access-Control-Allow-Credentials: true\r\n";
+                    ResponseMessage = header + "\r\n" + ResponseMessage;
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+
+
+
         }
+
+
 
         else {
 
