@@ -1,9 +1,0 @@
-get:
-
-get 'http://localhost:9876/get?course=networking&assignment=1'
-
-get -v 'http://httpbin.org/get?course=networking&assignment=1'
-
-get /
-
-get /foo

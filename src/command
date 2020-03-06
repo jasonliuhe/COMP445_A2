@@ -1,0 +1,9 @@
+need type in "httpfs" to start server
+
+
+curl -v 'http://localhost:8080/get?A1=1&A2=2'
+curl -v 'http://localhost:8080/get?A1=1&A2='    error
+curl -v http://localhost:8080/
+curl -v http://localhost:8080/1
+curl -v http://localhost:8080/1/2
+curl -v http://localhost:8080/foo.txt
